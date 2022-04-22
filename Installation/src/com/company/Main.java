@@ -11,17 +11,21 @@ public class Main {
             builder.append("The folder " + file.getName() + " exists \n");
     }
 
-    public static void createFolder(File file, StringBuilder builder) {
-        if (file.mkdir())
-            builder.append("The folder " + file.getName() + " was created \n");
+    public static void createFolder(File[] folders, StringBuilder builder) {
+        for (File file : folders) {
+            if (file.mkdir())
+                builder.append("The folder " + file.getName() + " was created \n");
+        }
     }
 
-    public static void createFile(File file, StringBuilder builder) {
-        try {
-            if (file.createNewFile())
-                builder.append("The file " + file.getName() + " was created \n");
-        } catch (IOException ex) {
-            builder.append(ex.getMessage() + "\n");
+    public static void createFile(File[] files, StringBuilder builder) {
+        for (File file : files) {
+            try {
+                if (file.createNewFile())
+                    builder.append("The file " + file.getName() + " was created \n");
+            } catch (IOException ex) {
+                builder.append(ex.getMessage() + "\n");
+            }
         }
     }
 
@@ -32,49 +36,34 @@ public class Main {
         File gamesFolder = new File("C:/Games/");
         exist(gamesFolder, log);
 
-        File srcFolder = new File("C:/Games/src/");
-        createFolder(srcFolder, log);
+        File[] folders = {
+                new File(gamesFolder, "src"),
+                new File(gamesFolder, "res"),
+                new File(gamesFolder, "saveGames"),
+                new File(gamesFolder, "temp"),
+                new File(gamesFolder + "/src", "main"),
+                new File(gamesFolder + "/src", "test"),
+                new File(gamesFolder + "/res", "drawables"),
+                new File(gamesFolder + "/res", "vectors"),
+                new File(gamesFolder + "/res", "icons"),
+        };
 
-        File resFolder = new File("C:/Games/res/");
-        createFolder(resFolder, log);
+        File[] files = {
+                new File(folders[4], "Main.java"),
+                new File(folders[4], "Utils.java"),
+                new File(folders[3], "temp.txt"),
+        };
 
-        File savegamesFolder = new File("C:/Games/savegames/");
-        createFolder(savegamesFolder, log);
-
-        File tempFolder = new File("C:/Games/temp/");
-        createFolder(tempFolder, log);
-
-        File mainSrcFolder = new File("C:/Games/src/main/");
-        createFolder(mainSrcFolder, log);
-
-        File testSrcFolder = new File("C:/Games/src/test/");
-        createFolder(testSrcFolder, log);
-
-        File mainFile = new File("C:/Games/src/main/Main.java");
-        createFile(mainFile, log);
-
-        File utilsFile = new File("C:/Games/src/main/Utils.java");
-        createFile(utilsFile, log);
-
-        File drawablesResFolder = new File("C:/Games/res/drawables/");
-        createFolder(drawablesResFolder, log);
-
-        File vectorsResFolder = new File("C:/Games/res/vectors/");
-        createFolder(vectorsResFolder, log);
-
-        File iconsResFolder = new File("C:/Games/res/icons/");
-        createFolder(iconsResFolder, log);
-
-        File textTempFolder = new File("C:/Games/temp/temp.txt");
-        createFile(textTempFolder, log);
+        createFolder(folders, log);
+        createFile(files, log);
 
         String logResult = log.toString();
-        try (FileWriter writer = new FileWriter(textTempFolder)) {
+        try (FileWriter writer = new FileWriter(files[2])) {
             writer.write(logResult);
             writer.flush();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        
     }
 }
+
